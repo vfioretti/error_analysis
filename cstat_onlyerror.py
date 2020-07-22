@@ -16,7 +16,6 @@
  - model = name of the model (the .xcm file must be <model>.xcm)
  - input_level = chi2 level to evaluate a confidence interval
  - statistic = 'cstat' or 'chi' (Statistic of the fit method)
- - selection = 'all' or list of int. Select the parameters used to get the errors with a list of parameter number.
  - blacklist = list of strings. Contains the list of the parameters's name to be frozen before the error computation.
  For instance if blacklist=['Sigma'] all parameters named 'Sigma' will be frozen and the error on those parameters won't be computed. Default is ['']
  - n_cores = float. Number of cores to set for the XSPEC parallel variable.
@@ -31,6 +30,9 @@
  - plot_statistic = bool. Used to plot or not the statistic graphs.
  - interp_method : str. Method for the interpolation of the statistic. "linear" uses a linear interpolation and the brentq method
  for a the root finding. "spline" uses a spline interpolation and find the roots with a scipy method in the spline class.
+ - selection = 'all' or list of numbers separated with space (e.g. "1 2 3"). Select the parameters used to get the errors with a list of parameter number.
+ - [optional] = if selection is 'some',
+ 
 
  --------------------------------------------------------------------------------
  Usage example:
@@ -54,20 +56,18 @@ import pyXIFU as px
 arg_list = sys.argv
 model = arg_list[1]
 statistic = arg_list[2]
-selection = arg_list[3]
-blacklist = arg_list[4]
-n_cores = np.int(arg_list[5])
-input_level = np.float(arg_list[6])
-plot_statistic = bool(arg_list[7])
-interp_method = arg_list[8]
+blacklist = arg_list[3]
+n_cores = np.int(arg_list[4])
+input_level = np.float(arg_list[5])
+plot_statistic = bool(arg_list[6])
+interp_method = arg_list[7]
+selection = arg_list[8]
 
-# simulation
-#Xset.restore(model+".xcm")
-#Xset.restore("simula.xcm")
+if selection == 'all':
+    selection_input = selection
 
-#Xset.save(model+"_error.xcm",info="a")
+if selection == 'some':
+    selection_input = list(arg_list[9].split(" "))
 
-if selection != "all": selection = list(string.split(" ")) 
-print selection
 
-px.ml_get_errors(model+"_error",'cstat',selection = selection, blacklist = blacklist, n_cores=n_cores,level=input_level, plot_statistic = plot_statistic, interp_method = interp_method)
+px.ml_get_errors(model+"_error",'cstat',selection = selection_input, blacklist = blacklist, n_cores=n_cores,level=input_level, plot_statistic = plot_statistic, interp_method = interp_method)
