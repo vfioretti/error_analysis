@@ -70,7 +70,7 @@ else:
     selection_list = list(arg_list[3].split(" "))
     selection_input = []
     for j in xrange(len(selection_list)):
-        selection_input.append(str(selection_list[j]))
+        selection_input.append(np.int(selection_list[j]))
 
 
 px.ml_get_errors(model+"_error",'cstat',selection = selection_input, blacklist = blacklist, n_cores=n_cores,level=input_level, plot_statistic = plot_statistic, interp_method = interp_method)
