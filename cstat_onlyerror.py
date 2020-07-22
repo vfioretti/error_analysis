@@ -67,9 +67,10 @@ interp_method = arg_list[8]
 if selection == 'all':
     selection_input = selection
 else:
-    selection_input = list(arg_list[3].split(" "))
-    print selection_input
-    selection_input = list(map(int, selection_input))
+    selection_list = list(arg_list[3].split(" "))
+    selection_input = []
+    for j in xrange(len(selection_list)):
+        selection_input.append(str(selection_list[j]))
 
 
 px.ml_get_errors(model+"_error",'cstat',selection = selection_input, blacklist = blacklist, n_cores=n_cores,level=input_level, plot_statistic = plot_statistic, interp_method = interp_method)
