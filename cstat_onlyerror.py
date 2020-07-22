@@ -68,6 +68,7 @@ if selection == 'all':
     selection_input = selection
 else:
     selection_input = list(arg_list[3].split(" "))
+    print selection_input
     selection_input = [int(i) for i in selection_input]
 
 
