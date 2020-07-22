@@ -66,8 +66,7 @@ interp_method = arg_list[8]
 
 if selection == 'all':
     selection_input = selection
-
-if selection == 'some':
+else:
     selection_input = list(arg_list[8].split(" "))
 
 
