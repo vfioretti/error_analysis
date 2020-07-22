@@ -68,11 +68,6 @@ if selection == 'all':
     selection_input = selection
 else:
     selection_list = list(arg_list[3].split(" "))
-    print selection_list
-    selection_input = []
-    for j in xrange(len(selection_list)):
-        print np.int(selection_list[j])
-        selection_input.append(np.int(selection_list[j]))
-print selection_input
+    selection_input = list(map(int, selection_list))
 
 px.ml_get_errors(model+"_error",'cstat',selection = selection_input, blacklist = blacklist, n_cores=n_cores,level=input_level, plot_statistic = plot_statistic, interp_method = interp_method)
