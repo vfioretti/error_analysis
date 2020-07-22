@@ -56,18 +56,19 @@ import pyXIFU as px
 arg_list = sys.argv
 model = arg_list[1]
 statistic = arg_list[2]
-blacklist = arg_list[3]
-n_cores = np.int(arg_list[4])
-input_level = np.float(arg_list[5])
-plot_statistic = bool(arg_list[6])
-interp_method = arg_list[7]
-selection = arg_list[8]
+selection = arg_list[3]
+blacklist = arg_list[4]
+n_cores = np.int(arg_list[5])
+input_level = np.float(arg_list[6])
+plot_statistic = bool(arg_list[7])
+interp_method = arg_list[8]
+
 
 if selection == 'all':
     selection_input = selection
 
 if selection == 'some':
-    selection_input = list(arg_list[9].split(" "))
+    selection_input = list(arg_list[8].split(" "))
 
 
 px.ml_get_errors(model+"_error",'cstat',selection = selection_input, blacklist = blacklist, n_cores=n_cores,level=input_level, plot_statistic = plot_statistic, interp_method = interp_method)
