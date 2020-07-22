@@ -152,7 +152,7 @@ def ml_get_errors(filexcm,statistic,selection='all',blacklist=[''],n_cores=8,lev
         if AllModels(1)(para_nb).link!='' or AllModels(1)(para_nb).frozen==True :
             print "<  INFO  > : Frozen parameter : I pass"
         else :  
-            if plot_statistic : pdf = matplotlib.backends.backend_pdf.PdfPages(str(para_nb)+'.pdf',metadata=metadata)
+            if plot_statistic : pdf = matplotlib.backends.backend_pdf.PdfPages(str(para_nb)+'.pdf')
             newbestfit=False
             cost_list,par_list=np.array([[],[]]),np.array([])       
             initial_value=AllModels(1)(para_nb).values[0]
@@ -289,3 +289,6 @@ def convert_to_excel(filename,dtype):
     df=pd.read_csv(filename+'_list.txt',header=None,delim_whitespace=True,comment="#",names=["para_nb","name","best_fit_value","error_min","error_max"])
     df.to_excel(filename+'.xlsx', 'Errors', index=False)
 """
+
+if __name__ == '__main__':
+    ml_get_errors()
