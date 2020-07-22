@@ -68,8 +68,10 @@ if selection == 'all':
     selection_input = selection
 else:
     selection_list = list(arg_list[3].split(" "))
+    print selection_list
     selection_input = []
     for j in xrange(len(selection_list)):
+        print np.int(selection_list[j])
         selection_input.append(np.int(selection_list[j]))
 
 
