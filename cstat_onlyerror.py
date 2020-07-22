@@ -15,13 +15,23 @@
  Parameters:
  - model = name of the model (the .xcm file must be <model>.xcm)
  - input_level = chi2 level to evaluate a confidence interval
+ - statistic = 'cstat' or 'chi' (Statistic of the fit method)
+ - selection = 'all' or list of int. Select the parameters used to get the errors with a list of parameter number.
+ - blacklist = list of strings. Contains the list of the parameters's name to be frozen before the error computation.
+ For instance if blacklist=['Sigma'] all parameters named 'Sigma' will be frozen and the error on those parameters won't be computed. Default is ['']
+ - n_cores = float. Number of cores to set for the XSPEC parallel variable.
+ - level : float. Chi2 level to evaluate a confidence interval. Default is chi2 = 2.706 for a 90% confidence interval.
+ +-----------+---------+---------+----------+---------+---------+---------+---------+---------+---------+
+ |   sigma   |  1.00s  |  1.28s  |  1.64s   |  1.96s  |  2.00s  |  2.58s  |  3.00s  |  3.29s  |  4.00s  |
+ +-----------+---------+---------+----------+---------+---------+---------+---------+---------+---------+
+ | conf_int  | 68.27%  | 80.00%  | 90.00%   | 95.00%  | 95.45%  | 99.00%  | 99.73%  | 99.90%  | 99.99%  |
+ | level     | 1.000   | 1.642   | 2.706    | 3.841   | 4.000   | 6.635   | 9.000   | 10.828  | 16.000  |
+ +-----------+---------+---------+----------+---------+---------+---------+---------+---------+---------+
+ 
+ - plot_statistic = bool. Used to plot or not the statistic graphs.
+ - interp_method : str. Method for the interpolation of the statistic. "linear" uses a linear interpolation and the brentq method
+ for a the root finding. "spline" uses a spline interpolation and find the roots with a scipy method in the spline class.
 
-    +-----------+---------+---------+----------+---------+---------+---------+---------+---------+---------+
-    |   sigma   |  1.00s  |  1.28s  |  1.64s   |  1.96s  |  2.00s  |  2.58s  |  3.00s  |  3.29s  |  4.00s  |
-    +-----------+---------+---------+----------+---------+---------+---------+---------+---------+---------+
-    | conf_int  | 68.27%  | 80.00%  | 90.00%   | 95.00%  | 95.45%  | 99.00%  | 99.73%  | 99.90%  | 99.99%  |
-    | level     | 1.000   | 1.642   | 2.706    | 3.841   | 4.000   | 6.635   | 9.000   | 10.828  | 16.000  |
-    +-----------+---------+---------+----------+---------+---------+---------+---------+---------+---------+
  --------------------------------------------------------------------------------
  Usage example:
  > python cstat_error.py base10 2.706 
@@ -43,7 +53,13 @@ import pyXIFU as px
 # Import the input parameters
 arg_list = sys.argv
 model = arg_list[1]
-input_level = np.float(arg_list[2])
+statistic = arg_list[2]
+selection = arg_list[3]
+blacklist = arg_list[4]
+n_cores = np.int(arg_list[5])
+input_level = np.float(arg_list[6])
+plot_statistic = bool(arg_list[7])
+interp_method = arg_list[8]
 
 # simulation
 #Xset.restore(model+".xcm")
@@ -51,4 +67,4 @@ input_level = np.float(arg_list[2])
 
 #Xset.save(model+"_error.xcm",info="a")
 
-px.ml_get_errors(model+"_error",'cstat',n_cores=8,level=input_level) 
+px.ml_get_errors(model+"_error",'cstat',selection = selection, blacklist = blacklist, n_cores=n_cores,level=input_level, plot_statistic = plot_statistic, interp_method = interp_method)
