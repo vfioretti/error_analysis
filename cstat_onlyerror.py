@@ -67,4 +67,6 @@ interp_method = arg_list[8]
 
 #Xset.save(model+"_error.xcm",info="a")
 
+if selection != "all": selection = np.int(selection)
+
 px.ml_get_errors(model+"_error",'cstat',selection = selection, blacklist = blacklist, n_cores=n_cores,level=input_level, plot_statistic = plot_statistic, interp_method = interp_method)
