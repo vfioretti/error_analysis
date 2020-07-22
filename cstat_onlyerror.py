@@ -1,5 +1,5 @@
 """
- cstat_error.py  -  pyXSPEC cstat error evaluation
+ cstat_onlyerror.py  -  pyXSPEC cstat error evaluation
  ---------------------------------------------------------------------------------
  Author: Mehdy Lefkir
  Modified by: V. Fioretti (INAF/OAS) valentina.fioretti@inaf.it
@@ -36,7 +36,7 @@
 
  --------------------------------------------------------------------------------
  Usage example:
- > python cstat_error.py base10 2.706 
+ > python cstat_onlyerror.py base10_60 "cstat" "1 2 6"  [''] 1 1 True "linear"
 """
 
 import matplotlib.pyplot as plt
