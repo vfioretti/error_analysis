@@ -16,6 +16,7 @@
  - model = name of the model (the .xcm file must be <model>.xcm)
  - input_level = chi2 level to evaluate a confidence interval
  - statistic = 'cstat' or 'chi' (Statistic of the fit method)
+ - selection = 'all' or list of numbers separated with space (e.g. "1 2 3"). Select the parameters used to get the errors with a list of parameter number.
  - blacklist = list of strings. Contains the list of the parameters's name to be frozen before the error computation.
  For instance if blacklist=['Sigma'] all parameters named 'Sigma' will be frozen and the error on those parameters won't be computed. Default is ['']
  - n_cores = float. Number of cores to set for the XSPEC parallel variable.
@@ -30,9 +31,6 @@
  - plot_statistic = bool. Used to plot or not the statistic graphs.
  - interp_method : str. Method for the interpolation of the statistic. "linear" uses a linear interpolation and the brentq method
  for a the root finding. "spline" uses a spline interpolation and find the roots with a scipy method in the spline class.
- - selection = 'all' or list of numbers separated with space (e.g. "1 2 3"). Select the parameters used to get the errors with a list of parameter number.
- - [optional] = if selection is 'some',
- 
 
  --------------------------------------------------------------------------------
  Usage example:
