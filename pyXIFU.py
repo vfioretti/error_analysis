@@ -28,6 +28,7 @@ import sys
 import shutil
 import datetime
 from plotting import ml_plots,ml_plotting_statistics_errors
+import matplotlib.pyplot as plt
 
 Xset.chatter=0
 
