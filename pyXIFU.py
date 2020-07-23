@@ -28,20 +28,58 @@ import sys
 import shutil
 import datetime
 from plotting import ml_plots,ml_plotting_statistics_errors
+from scipy.optimize import brentq
 import matplotlib.pyplot as plt
 
 Xset.chatter=0
 
-def ml_interpolation_statistics_errors(init_value,x_graph,y_graph,hard_min_hit,level):
-    """#--Spline interpolation--"""
+def ml_interpolation_statistics_errors(initial_value,x_graph,y_graph,hardcap_hit,level,interp_method="linear"):
+    """Function to interpolate the fit statistic and compute the roots.
+        
+        Parameters
+        ----------
+        initial_value : float
+        Initial value of the parameter.
+        x_graph : numpy array
+        Array of parameter values.
+        y_graph : numpy array
+        Array of fit statistic values.
+        hardcap_hit : [bool,bool]
+        Informs the hard cap hit for the left side : hardcap_hit[0] and for the right side hardcap_hit[1]
+        level : float
+        Statistic level to evaluate the confidence interval.
+        method : str
+        Method for the interpolation of the statistic. "linear" uses a linear interpolation and the brentq method
+        for a the root finding. "spline" uses a spline interpolation and find the roots with a scipy method in the spline class.
+        
+        """
     xnew=np.linspace(min(x_graph),max(x_graph),10000)
-    f=interpolate.InterpolatedUnivariateSpline(x_graph,y_graph)
-    yreduced=y_graph-level
-    freduced=interpolate.InterpolatedUnivariateSpline(x_graph, yreduced)
-    if hard_min_hit:
-        return 0,np.abs(init_value-freduced.roots()[0]),xnew,f
-    return init_value-freduced.roots()[0],freduced.roots()[1]-init_value,xnew,f
     
+    if interp_method=="linear":
+        f=interpolate.interp1d(x_graph,y_graph-level)
+        ynew=f(xnew)
+        if hardcap_hit=="None":
+            root_min = brentq(f,min(xnew),xnew[np.where(ynew==min(ynew))])
+            root_max = brentq(f,xnew[np.where(ynew==min(ynew))],max(xnew))
+            return np.abs(initial_value-root_min),np.abs(root_max-initial_value),xnew,f
+        elif hardcap_hit[0]:
+            root_max = brentq(f,xnew[np.where(ynew==min(ynew))],max(xnew))
+            return np.abs(initial_value-root_max),xnew,f
+        elif hardcap_hit[1]:
+            root_min = brentq(f,min(xnew),xnew[np.where(ynew==min(ynew))])
+            return np.abs(initial_value-root_min),xnew,f
+    elif interp_method=="spline":
+        f=interpolate.InterpolatedUnivariateSpline(x_graph,y_graph)
+        yreduced=y_graph-level
+        freduced=interpolate.InterpolatedUnivariateSpline(x_graph, yreduced)
+        if hardcap_hit=="None":
+            return initial_value-freduced.roots()[0],freduced.roots()[1]-initial_value,xnew,f
+        elif hardcap_hit[0]:
+            return np.abs(initial_value-freduced.roots()[0]),xnew,f
+        elif hardcap_hit[1]:
+            return np.abs(initial_value-freduced.roots()[0]),xnew,f
+
+
 def ml_get_errors(filexcm,statistic,selection='all',blacklist=[''],n_cores=8,level=2.706,plot_statistic=True,interp_method="linear"):
     """Main function to evaluate errors of an XSPEC model.
 
